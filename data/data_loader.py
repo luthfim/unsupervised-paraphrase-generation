@@ -60,6 +60,10 @@ class QQPDataset(Dataset):
             sentences, return_tensors='pt', truncation=True,
             padding='max_length', max_length=self.max_length)
 
+        # print('SENTENCES: ' + sentences)
+        # encodings = self.tokenizer(sentences)
+        # print(encodings)
+
         self.input_ids = encodings['input_ids']
         self.attention_mask = encodings['attention_mask']
 

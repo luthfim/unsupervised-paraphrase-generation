@@ -8,6 +8,7 @@ from nltk.tokenize.treebank import TreebankWordDetokenizer
 from transformers import GPT2Tokenizer
 
 from eda import synonym_replacement
+from id_utils import load_id_stopwords
 
 english_stopwords = stopwords.words('english')
 
@@ -19,6 +20,8 @@ english_stopwords += ['everything']
 # 3. Similar words from those of case study
 english_stopwords += ['anyone', 'anything', 'everyone']
 
+id_stopwords = load_id_stopwords()
+stopwords = id_stopwords
 tokenizer = TreebankWordTokenizer()
 detokenizer = TreebankWordDetokenizer()
 
@@ -26,7 +29,7 @@ detokenizer = TreebankWordDetokenizer()
 def remove_stopwords(sentence):
     sentence = tokenizer.tokenize(sentence)
     sentence = [word for word in sentence
-                if word.lower() not in english_stopwords]
+                if word.lower() not in stopwords]
     sentence = ' '.join(sentence)
     sentence = sentence.replace("''", '"').replace('``', '"')
     sentence = detokenizer.detokenize(sentence.split())

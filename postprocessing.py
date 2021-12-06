@@ -165,7 +165,8 @@ if __name__ == '__main__':
     log_format = '%(asctime)s [%(levelname)s] %(message)s'
     log_level = logging.DEBUG if args.debug else logging.INFO_
     log_level_utils = logging.DEBUG if args.debug else logging.INFO
-    logging.basicConfig(level=log_level, format=log_format, filename=args.log)
+    # logging.basicConfig(level=log_level, format=log_format, filename=args.log)
+    logging.basicConfig(level=log_level, format=log_format)
     logging.getLogger().setLevel(log_level)
     util_loggers = [
         "modeling_utils",

@@ -16,7 +16,7 @@ dev_num = 60000
 unlabeled_used = 300000
 
 random.seed(1234)
-os.mkdir("QQP_split")
+# os.mkdir("QQP_split")
 
 
 def data_cleansing(text):

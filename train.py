@@ -13,7 +13,7 @@ from data.data_loader import QQPDataset
 
 
 start_datetime = datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
-
+torch.cuda.is_available = lambda : False
 
 def train(args):
     device = args.device
@@ -22,6 +22,7 @@ def train(args):
     gpt_model = FinetuneGPT2(args)
     gpt_model.build_model(checkpoint_dir=args.checkpoint)
 
+    # print(args.train_data_path)
     train_dataset = QQPDataset(gpt_model.tokenizer, args.train_data_path,
                                max_length=args.max_length,
                                load_noise_data=True,
@@ -52,7 +53,9 @@ def train(args):
     )
 
     trainer = Trainer(
-        model=gpt_model.model,
+        # model=gpt_model.model,
+        # model=gpt_model.model.cpu(),
+        model=gpt_model.model.to('cpu'),
         args=training_args,
         train_dataset=train_dataset,
         eval_dataset=dev_dataset,
@@ -86,7 +89,7 @@ if __name__ == '__main__':
     parser.add_argument('--device', type=str, default='cuda',
                         help='{cuda, cpu}')
 
-    parser.add_argument('--model', type=str, default='gpt2-medium',
+    parser.add_argument('--model', type=str, default='gpt2',
                         help='pretrained model name (only gpt available)')
     parser.add_argument('--max_length', type=int, default=1024,
                         help='Maximum number of tokens for each sequence')
@@ -128,8 +131,12 @@ if __name__ == '__main__':
     log_file = args.log
     if args.tag:
         log_file = log_file.replace('{datetime}', args.tag + '_{datetime}')
-    logging.basicConfig(level=log_level, format=log_format,
-                        filename=log_file.format(datetime=start_datetime))
+        print(log_file)
+        # file = open('myfile.dat', 'w+')
+
+    # logging.basicConfig(level=log_level, format=log_format,
+    #                     filename=log_file.format(datetime=start_datetime))
+    logging.basicConfig(level=log_level, format=log_format)                        
     logging.getLogger().setLevel(log_level)
 
     # Reproducibility

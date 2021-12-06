@@ -1,5 +1,5 @@
 
-DATA_DIR="./QQP_split/"
+DATA_DIR="./id_data"
 
 TRAIN_INPUT="${DATA_DIR}/train.txt"
 TRAIN_DATA="${DATA_DIR}/train_preprocessed.txt"

@@ -8,9 +8,9 @@ import logging
 
 import numpy as np
 import torch
-from model.gpt2_trainer import FinetuneGPT2
+from model.gpt2_finetune_model import FinetuneGPT2
 
-
+torch.cuda.is_available = lambda : False
 start_datetime = datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
 
 
@@ -103,7 +103,8 @@ if __name__ == '__main__':
 
     log_format = '%(asctime)s [%(levelname)s] %(message)s'
     log_level = logging.DEBUG if args.debug else logging.INFO
-    logging.basicConfig(level=log_level, format=log_format, filename=args.log)
+    # logging.basicConfig(level=log_level, format=log_format, filename=args.log)
+    logging.basicConfig(level=log_level, format=log_format)
     logging.getLogger().setLevel(log_level)
 
     # Reproducibility

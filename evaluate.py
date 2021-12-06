@@ -20,7 +20,7 @@ def evaluate(args):
     metrics = args.metrics.lower().split(',')
 
     sentences = defaultdict(list)
-    with open(args.generated) as f:
+    with open(args.generated, 'w+') as f:
         lines = [line.strip().split('\t') for line in f]
         lines = [(int(row[0]), row[1]) for row in lines]
         for idx, sent in lines:
@@ -28,7 +28,7 @@ def evaluate(args):
     logging.debug("Example generated sentences: {}".format(sentences[0]))
     logging.debug("Read {} generated sentences".format(len(sentences)))
 
-    with open(args.ground_truth) as f:
+    with open(args.ground_truth, 'w+') as f:
         gt_sentences = [line.strip() for line in f]
     logging.debug("Example gt sentences: {}".format(gt_sentences[0]))
     logging.debug("Read {} gt sentences".format(len(gt_sentences)))
@@ -184,7 +184,8 @@ if __name__ == '__main__':
 
     log_format = '%(asctime)s [%(levelname)s] %(message)s'
     log_level = logging.DEBUG if args.debug else logging.INFO
-    logging.basicConfig(level=log_level, format=log_format, filename=args.log)
+    # logging.basicConfig(level=log_level, format=log_format, filename=args.log)
+    logging.basicConfig(level=log_level, format=log_format)
     logging.getLogger().setLevel(log_level)
     if args.verbose is True:
         stdout_handler = logging.StreamHandler(sys.stdout)
