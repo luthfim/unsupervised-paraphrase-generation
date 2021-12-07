@@ -9,6 +9,7 @@ from transformers import GPT2Tokenizer
 
 from eda import synonym_replacement
 from id_utils import load_id_stopwords
+import tqdm
 
 english_stopwords = stopwords.words('english')
 
@@ -49,32 +50,70 @@ def sentence_noising(sentence, shuffle_ratio=0.2, replace_ratio=0.2):
     return ' '.join(words)
 
 
+# def data_preparation(args):
+#     gpt_tokenizer = GPT2Tokenizer.from_pretrained('gpt2-medium')
+#     data = []
+#     with open(args.input) as f:
+#         skipped = 0
+#         for line in tqdm.tqdm(f):
+#             sentence = line.strip()
+#             corrupted_sentence = remove_stopwords(sentence)
+#             write_line = corrupted_sentence + '\n' + sentence
+#             if len(gpt_tokenizer.encode(write_line)) < args.max_length:
+#                 data.append([corrupted_sentence, sentence])
+#             else:
+#                 skipped += 1
+#     print("Skipped: {}".format(skipped))
+
+#     with open(args.output, 'w') as wf:
+#         writer = csv.writer(wf)
+#         for corrupted, sentence in data:
+#             writer.writerow([corrupted, sentence])
+
+#     if args.save_noised_output is True:
+#         with open(args.noised_output, 'w') as wf:
+#             writer = csv.writer(wf)
+#             for corrupted, sentence in data:
+#                 corrupted = sentence_noising(corrupted)
+#                 writer.writerow([corrupted, sentence])
+
 def data_preparation(args):
-    gpt_tokenizer = GPT2Tokenizer.from_pretrained('gpt2-medium')
-    data = []
+    gpt_tokenizer = GPT2Tokenizer.from_pretrained('cahya/gpt2-small-indonesian-522M')
+    # data = []
+
+    fout = open(args.output, 'w')
+    fout_c = open(args.noised_output, 'w')
+    writer1 = csv.writer(fout)
+    writer2 = csv.writer(fout_c)
+
     with open(args.input) as f:
         skipped = 0
-        for line in f:
+        for line in tqdm.tqdm(f):
             sentence = line.strip()
             corrupted_sentence = remove_stopwords(sentence)
             write_line = corrupted_sentence + '\n' + sentence
             if len(gpt_tokenizer.encode(write_line)) < args.max_length:
-                data.append([corrupted_sentence, sentence])
+                writer1.writerow([corrupted_sentence, sentence])
+                if args.save_noised_output is True:
+                    corrupted_sentence = sentence_noising(corrupted_sentence)
+                    writer2.writerow([corrupted_sentence, sentence])
             else:
                 skipped += 1
     print("Skipped: {}".format(skipped))
 
-    with open(args.output, 'w') as wf:
-        writer = csv.writer(wf)
-        for corrupted, sentence in data:
-            writer.writerow([corrupted, sentence])
 
-    if args.save_noised_output is True:
-        with open(args.noised_output, 'w') as wf:
-            writer = csv.writer(wf)
-            for corrupted, sentence in data:
-                corrupted = sentence_noising(corrupted)
-                writer.writerow([corrupted, sentence])
+
+    # with open(args.output, 'w') as wf:
+    #     writer = csv.writer(wf)
+    #     for corrupted, sentence in data:
+    #         writer.writerow([corrupted, sentence])
+
+    # if args.save_noised_output is True:
+    #     with open(args.noised_output, 'w') as wf:
+    #         writer = csv.writer(wf)
+    #         for corrupted, sentence in data:
+    #             corrupted = sentence_noising(corrupted)
+    #             writer.writerow([corrupted, sentence])
 
 
 if __name__ == '__main__':

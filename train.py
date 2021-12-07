@@ -13,7 +13,6 @@ from data.data_loader import QQPDataset
 
 
 start_datetime = datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
-torch.cuda.is_available = lambda : False
 
 def train(args):
     device = args.device
@@ -53,9 +52,7 @@ def train(args):
     )
 
     trainer = Trainer(
-        # model=gpt_model.model,
-        # model=gpt_model.model.cpu(),
-        model=gpt_model.model.to('cpu'),
+        model=gpt_model.model,
         args=training_args,
         train_dataset=train_dataset,
         eval_dataset=dev_dataset,
@@ -125,6 +122,9 @@ if __name__ == '__main__':
 
     if args.summary_dir is None:
         args.summary_dir = args.save_dir.replace('checkpoints', 'runs')
+
+    if args.device == 'cpu':
+        torch.cuda.is_available = lambda : False # force use cpu
 
     log_format = '%(asctime)s [%(levelname)s] %(message)s'
     log_level = logging.DEBUG if args.debug else logging.INFO

@@ -1,8 +1,8 @@
 
-DATA_DIR="./id_data"
+DATA_DIR="./processed_uncased_blanklines"
 
-TRAIN_INPUT="${DATA_DIR}/train.txt"
-TRAIN_DATA="${DATA_DIR}/train_preprocessed.txt"
+TRAIN_INPUT="${DATA_DIR}/oscar_all_uncased.txt"
+TRAIN_DATA="${DATA_DIR}/processed_oscar_all_uncased.txt"
 DEV_INPUT="${DATA_DIR}/dev.txt"
 DEV_DATA="${DATA_DIR}/dev_preprocessed.txt"
 TEST_INPUT="${DATA_DIR}/test_input.txt"
@@ -15,10 +15,10 @@ python preprocessing.py \
     --output ${TRAIN_DATA} \
     --save_noised_output
 
-python preprocessing.py \
-    --input ${DEV_INPUT} \
-    --output ${DEV_DATA}
+# python preprocessing.py \
+#     --input ${DEV_INPUT} \
+#     --output ${DEV_DATA}
 
-python preprocessing.py \
-    --input ${TEST_INPUT} \
-    --output ${TEST_DATA}
+# python preprocessing.py \
+#     --input ${TEST_INPUT} \
+#     --output ${TEST_DATA}
